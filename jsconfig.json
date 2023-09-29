@@ -2,5 +2,5 @@
   "compilerOptions": {
     "baseUrl": "src"
   },
-  "include": ["src"]
+  "include": ["src", "src/components/App", "src/components/App/App.styled.js", "src/components/App/App.jsx"]
 }
