@@ -34,7 +34,7 @@ export const ListItem = styled.li`
   &:hover p,
   &:hover svg {
     color: #fff;
-    font-weight: 800;
+    font-weight: 700;
   }
 `;
 
@@ -47,6 +47,10 @@ export const Text = styled.p`
 `;
 
 export const DeleteButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
   padding: 4px;
   width: 36px;
   height: 36px;
