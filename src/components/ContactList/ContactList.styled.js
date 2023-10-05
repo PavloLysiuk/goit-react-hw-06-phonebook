@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 
 export const Title = styled.h2`
-  margin: 0 0 24px;
-
   font-size: 24px;
   font-weight: 700;
   text-align: center;
@@ -50,7 +48,7 @@ export const DeleteButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  
+
   padding: 4px;
   width: 36px;
   height: 36px;
@@ -77,4 +75,9 @@ export const DeleteButton = styled.button`
   &:hover {
     background-color: #0099e6;
   }
+`;
+
+export const NoContacts = styled.div`
+  text-align: center;
+  color: #40bfff;
 `;

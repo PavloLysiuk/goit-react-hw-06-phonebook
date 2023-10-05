@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { Field, ErrorMessage } from 'formik';
 
 export const Title = styled.h2`
   margin: 0 0 24px;
@@ -12,7 +11,7 @@ export const Title = styled.h2`
   color: #19293b;
 `;
 
-export const FormInput = styled(Field)`
+export const FormInput = styled.input`
   margin-bottom: 12px;
   padding: 8px 16px;
   width: 100%;
@@ -28,7 +27,7 @@ export const FormInput = styled(Field)`
   }
 `;
 
-export const ErrorMsg = styled(ErrorMessage)`
+export const ErrorMsg = styled.p`
   margin: -4px 0 8px;
   color: #ff4b85;
 `;

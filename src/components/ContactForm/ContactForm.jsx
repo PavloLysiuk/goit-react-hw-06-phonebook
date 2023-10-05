@@ -1,23 +1,33 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { addContact } from 'redux/contactsSlice';
 
-import { Title, FormInput, AddButton } from './ContactForm.styled';
+import { Title, FormInput, AddButton, ErrorMsg } from './ContactForm.styled';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Formik, Form } from 'formik';
-import * as Yup from 'yup';
+import * as yup from 'yup';
+import toast from 'react-hot-toast';
 
-const SubmitSchema = Yup.object().shape({
-  name: Yup.string()
-    .min(3, 'Name Is Too Short!')
-    .max(30, 'Name Is Too Long!')
-    .required('Required'),
-  number: Yup.number()
-    .min(3, 'Number Is Too Short!')
-    .max(9999999, 'Number Is Too Long!')
-    .positive('Must be positive')
-    .required('Required'),
-});
+const schema = yup
+  .object({
+    name: yup
+      .string()
+      .min(3, 'Name must have at least 3 characters')
+      .required('Name is required')
+      .matches(
+        /^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$/,
+        'Name is allowed to include only letters, apostrophes, dashes, and spaces'
+      ),
+    number: yup
+      .string()
+      .min(7, 'Phone number should be a minimum of 7 characters')
+      .max(17, 'Phone number must not exceed 17 characters in length.')
+      .required('Number is required')
+      .matches(
+        /\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}/,
+        'Phone number must consist of digits and may include spaces, dashes, parentheses, and can begin with a plus sign (+)'
+      ),
+  })
+  .required();
 
 export const ContactForm = () => {
   const dispatch = useDispatch();
@@ -30,7 +40,7 @@ export const ContactForm = () => {
     formState: { errors },
   } = useForm({
     mode: 'onTouched',
-    resolver: yupResolver(SubmitSchema),
+    resolver: yupResolver(schema),
   });
 
   const onSubmit = ({ name, number }) => {
@@ -39,38 +49,44 @@ export const ContactForm = () => {
         contact => contact.name.toLowerCase() === name.toLowerCase()
       )
     ) {
-      return alert(`${name} is already in contacts`);
+      toast.error(`${name} is already in contacts`, {
+        style: {
+          background: '#ffd500',
+        },
+      });
+      reset();
+      return;
     }
-
+    toast.success(`${name} is added to contacts`, {
+      style: {
+        color: 'white',
+        background: '#5cc400',
+      },
+    });
     dispatch(addContact(name, number));
     reset();
   };
 
   return (
-    <div>
+    <>
       <Title>Phone Book</Title>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <FormInput
+          type="text"
+          {...register('name')}
+          placeholder="Full Name (Example: Pavlo Lysiuk)"
+        />
+        {errors.name && <ErrorMsg>{errors.name.message}</ErrorMsg>}
 
-      <Formik
-        initialValues={{ name: '', number: '' }}
-        validationSchema={SubmitSchema}
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        <Form>
-          <FormInput
-            type="text"
-            {...register('name')}
-            placeholder="Full Name (Example: Pavlo Lysiuk)"
-          />
-          {errors.name && <p>{errors.name.message}</p>}
-          <FormInput
-            type="tel"
-            {...register('name')}
-            placeholder="Phone number (Example: XXXXXXX)"
-          />
-          {errors.number && <p>{errors.number.message}</p>}
-          <AddButton type="submit">Add contact</AddButton>
-        </Form>
-      </Formik>
-    </div>
+        <FormInput
+          type="tel"
+          {...register('number')}
+          placeholder="Phone number (Example: XXXXXXX)"
+        />
+        {errors.number && <ErrorMsg>{errors.number.message}</ErrorMsg>}
+
+        <AddButton type="submit">Add contact</AddButton>
+      </form>
+    </>
   );
 };

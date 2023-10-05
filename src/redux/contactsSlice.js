@@ -1,14 +1,16 @@
-import { createSlice } from '@reduxjs/toolkit';
-import prevContacts from 'data/prevContacts';
-import { nanoid } from 'nanoid';
+import { createSlice, nanoid } from '@reduxjs/toolkit';
+import prevContacts from '../data/prevContacts';
+import toast from 'react-hot-toast';
 
 const contactsSlice = createSlice({
   name: 'contacts',
-  initialState: { contacts: prevContacts },
+  initialState: {
+    contactsList: prevContacts,
+  },
   reducers: {
     addContact: {
       reducer(state, { payload }) {
-        state.contacts.push(payload);
+        state.contactsList.push(payload);
       },
       prepare(name, number) {
         return {
@@ -21,11 +23,23 @@ const contactsSlice = createSlice({
       },
     },
     deleteContact(state, { payload }) {
-      const index = state.contacts.findIndex(contact => contact.id === payload);
-      state.contacts.splice(index, 1);
+      const deletedContact = state.contactsList.find(
+        contact => contact.id === payload
+      );
+      if (deletedContact) {
+        state.contactsList = state.contactsList.filter(
+          contact => contact.id !== payload
+        );
+        toast.success(`${deletedContact.name} is successfully deleted`, {
+          style: {
+            color: 'white',
+            background: '#ff8e31',
+          },
+        });
+      }
     },
   },
 });
 
-export const contactsReducer = contactsSlice.reducer;
 export const { addContact, deleteContact } = contactsSlice.actions;
+export const contactsReducer = contactsSlice.reducer;

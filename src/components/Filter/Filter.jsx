@@ -3,8 +3,8 @@ import { filterContacts } from 'redux/filterSlice';
 
 import { SearchInput } from './Filter.styled';
 export const Filter = () => {
-  const filterValue = useSelector(state => state.filter.value);
   const dispatch = useDispatch();
+  const filterValue = useSelector(state => state.filter.value);
 
   return (
     <label>
