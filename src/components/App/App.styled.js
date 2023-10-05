@@ -17,8 +17,3 @@ export const Container = styled.div`
     box-shadow: 0 5px 12px rgba(50, 100, 150, 0.25);
   }
 `;
-
-export const NoContacts = styled.div`
-  text-align: center;
-  color: #40bfff;
-`;

@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { addContact } from 'redux/contactsSlice';
-
 import { Title, FormInput, AddButton, ErrorMsg } from './ContactForm.styled';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
